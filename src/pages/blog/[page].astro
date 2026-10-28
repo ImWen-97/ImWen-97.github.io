@@ -1,0 +1,46 @@
+---
+import Pagination from '@/components/ui/Pagination.astro'
+import Layout from '@/layouts/Layout.astro'
+import BlogPostCard from '@/components/ui/BlogPostCard.astro'
+import { template } from '@/settings'
+import { getCollection } from 'astro:content'
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const blogEntries = await getCollection("blog");
+
+    const posts = blogEntries
+        .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+    return paginate(posts, {
+        pageSize: template.postPerPage,
+    });
+}) satisfies GetStaticPaths
+interface Props {
+    page: Page<CollectionEntry<'blog'>>
+}
+const { page } = Astro.props
+---
+
+<Layout title='ArchEcho Notes | Jingwen Zheng' description='Research notes on computer architecture, PIM, LLM inference, and learning in public.'>
+    <div>
+        <div class="page-head mb-10">
+          <span class="eyebrow">ArchEcho / Notes</span>
+          <h1 class="section-title mt-5">Ideas worth keeping.</h1>
+          <p class="section-desc mt-5">A growing collection of research notes, paper readings, and reflections on systems and learning.</p>
+        </div>
+		<div class='grid gap-8'>
+			{
+				page.data.map(post => (
+                    <BlogPostCard post={post} />
+				))
+			}
+		</div>
+
+		<div class='flex justify-center mt-8'>
+			<Pagination page={page} />
+		</div>
+    </div>
+
+</Layout>

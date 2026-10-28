@@ -1,0 +1,52 @@
+---
+import ThemeSelector from '@/components/ui/ThemeSelector.astro'
+import Search from '@/components/ui/Search.astro'
+import Head from '@/components/Head.astro'
+import Footer from '@/components/ui/Footer.astro'
+import { seo, template } from '@/settings'
+import '@/styles/global.css'
+
+type Props = { title?: string; description?: string; image?: string }
+const { title = seo.default_title, description = seo.default_description, image = seo.default_image } = Astro.props
+const links = [
+  { name: 'Home', href: '/' },
+  { name: 'Research', href: '/research' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Notes', href: '/blog/1' },
+  { name: 'About', href: '/about' },
+]
+---
+<!doctype html>
+<html lang="en" data-theme={template.lightTheme}>
+  <head><Head title={title} description={description} image={image} /></head>
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <div class="site-frame">
+      <header class="site-header">
+        <div class="site-header-inner">
+          <a href="/" class="site-brand" aria-label="Jingwen Zheng home">
+            <span class="brand-mark">JW<span class="brand-mark-dot">.</span></span>
+            <span class="brand-name">Jingwen Zheng <span class="brand-separator">/</span> <span class="brand-sub">ArchEcho</span></span>
+          </a>
+          <nav class="desktop-nav" aria-label="Main navigation">
+            {links.map((link) => <a class:list={['nav-link', { 'nav-link-active': Astro.url.pathname === link.href }]} href={link.href}>{link.name}</a>)}
+          </nav>
+          <div class="site-actions">
+            <Search />
+            <ThemeSelector />
+            <a class="github-icon" href="https://github.com/ImWen-97" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .9A11.1 11.1 0 0 0 .9 12c0 4.9 3.2 9.1 7.6 10.6.6.1.8-.3.8-.6v-2.1c-3.1.7-3.8-1.3-3.8-1.3-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.8-.7 2.2-1.1.1-.7.4-1.1.7-1.4-2.5-.3-5.1-1.3-5.1-5.5 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3.1 1.2a10.7 10.7 0 0 1 5.6 0c2.1-1.5 3.1-1.2 3.1-1.2.6 1.5.2 2.6.1 2.9.7.8 1.1 1.8 1.1 3 0 4.3-2.6 5.2-5.1 5.5.4.3.7.9.7 1.7V22c0 .3.2.7.8.6A11.1 11.1 0 0 0 23.1 12 11.1 11.1 0 0 0 12 .9Z"/></svg>
+            </a>
+            <details class="mobile-menu">
+              <summary aria-label="Open navigation"><span></span><span></span><span></span></summary>
+              <nav class="mobile-menu-panel" aria-label="Mobile navigation">
+                {links.map((link) => <a href={link.href}>{link.name}</a>)}
+              </nav>
+            </details>
+          </div>
+        </div>
+      </header>
+      <main class="site-main"><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { projects } from '@/data/projects'
+import { getCollection } from 'astro:content'
+
+const notes = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3)
+---
+<Layout>
+  <section class="relative pt-20 md:pt-30 pb-20 border-b border-base-300">
+    <div class="absolute top-14 right-0 hidden lg:block pointer-events-none opacity-60" aria-hidden="true">
+      <svg width="290" height="290" viewBox="0 0 290 290" fill="none"><circle cx="145" cy="145" r="112" stroke="#9AB6CB" stroke-dasharray="5 7"/><circle cx="145" cy="145" r="79" stroke="#9AB6CB"/><circle cx="145" cy="145" r="46" stroke="#9AB6CB" stroke-dasharray="4 7"/><path d="M145 25v240M25 145h240" stroke="#BDD1D6"/><rect x="130" y="130" width="30" height="30" rx="7" fill="#527A9F"/><circle cx="145" cy="33" r="6" fill="#65A9AB"/><circle cx="257" cy="145" r="6" fill="#65A9AB"/></svg>
+    </div>
+    <div class="max-w-[760px] relative z-10">
+      <span class="eyebrow">Computer Architecture · Research & Writing</span>
+      <h1 class="mt-8 text-[clamp(2.9rem,6.4vw,5.2rem)] leading-[1.075] tracking-[-.063em] font-extrabold">
+        Hello, I'm <span class="text-gradient">Jingwen.</span>
+      </h1>
+      <p class="mt-7 max-w-[670px] text-lg sm:text-xl leading-[1.75] text-base-content/75">
+        A master's student exploring the intersection of <strong class="text-base-content font-semibold">memory systems</strong>, <strong class="text-base-content font-semibold">AI acceleration</strong>, and <strong class="text-base-content font-semibold">reliable computing</strong>.
+      </p>
+      <p class="mt-5 max-w-[680px] text-base leading-8 text-base-content/55">
+        My current interests include efficient long-context LLM inference on heterogeneous GPU–PIM systems, and cross-layer reliability analysis for ReRAM accelerators.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a class="btn bg-[#27476b] hover:bg-[#376190] border-0 text-white px-6 rounded-xl" href="/research">Explore research <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-outline border-base-300 rounded-xl px-6" href="/blog/1">Read ArchEcho <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-base-content/55">
+        <span class="flex items-center gap-2"><span class="size-2 rounded-full bg-[#6daeab]"></span> Master's Student</span>
+        <span>Computer Technology</span>
+        <a href="https://github.com/ImWen-97" class="underline underline-offset-4 decoration-base-300 hover:text-[#4478b3]">github.com/ImWen-97</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-18 border-b border-base-300">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-9">
+      <div><span class="eyebrow">01 / Focus</span><h2 class="section-title mt-4">Research interests</h2></div>
+      <a class="link-arrow" href="/research">All research →</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4">
+      <article class="soft-card">
+        <div class="text-3xl mb-8 text-[#4579ab] font-mono">01<span class="text-[#72aba9]">.</span></div>
+        <h3 class="text-xl font-bold mb-3">LLM × PIM</h3>
+        <p class="section-desc text-sm">Long-context inference, KV-cache access, and memory-aware heterogeneous acceleration.</p>
+      </article>
+      <article class="soft-card">
+        <div class="text-3xl mb-8 text-[#4579ab] font-mono">02<span class="text-[#72aba9]">.</span></div>
+        <h3 class="text-xl font-bold mb-3">Reliable Computing</h3>
+        <p class="section-desc text-sm">Understanding how device-level faults affect higher-level workload execution.</p>
+      </article>
+      <article class="soft-card">
+        <div class="text-3xl mb-8 text-[#4579ab] font-mono">03<span class="text-[#72aba9]">.</span></div>
+        <h3 class="text-xl font-bold mb-3">Architecture</h3>
+        <p class="section-desc text-sm">Cross-layer modeling and the co-design of memory systems, accelerators, and algorithms.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="py-18 border-b border-base-300">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-9">
+      <div><span class="eyebrow">02 / Work</span><h2 class="section-title mt-4">Selected projects</h2></div>
+      <a class="link-arrow" href="/projects">View all projects →</a>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+      {projects.filter(p => p.featured).map((p) => (
+        <a href={'/projects#' + p.id} class="soft-card group block no-underline">
+          <div class="flex items-start justify-between gap-3"><span class="pill">{p.status}</span><span class="text-base-content/40 text-xl group-hover:text-[#4478b3]">↗</span></div>
+          <h3 class="text-2xl font-bold tracking-tight mt-8">{p.name}</h3>
+          <p class="text-base-content/75 mt-2 font-medium">{p.subtitle}</p>
+          <p class="section-desc text-sm mt-4">{p.description}</p>
+          <div class="mt-6 flex flex-wrap gap-2">{p.tags.map(tag => <span class="text-xs text-base-content/60 px-2.5 py-1.5 border border-base-300 rounded-lg">{tag}</span>)}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="py-18">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-9">
+      <div><span class="eyebrow">03 / Writing</span><h2 class="section-title mt-4">Latest from ArchEcho</h2><p class="section-desc text-sm mt-3">Notes on papers, systems, and learning in public.</p></div>
+      <a class="link-arrow" href="/blog/1">Browse all notes →</a>
+    </div>
+    <div class="grid gap-4">
+      {notes.map(post => (
+        <a class="block soft-card group no-underline" href={'/blog/' + post.id}>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex gap-2">{post.data.tags?.slice(0, 2).map(tag => <span class="pill">{tag}</span>)}</div>
+            <time class="text-sm text-base-content/45" datetime={post.data.date}>{post.data.date}</time>
+          </div>
+          <div class="flex justify-between items-center gap-4 mt-4"><div><h3 class="text-xl font-bold group-hover:text-[#4478b3]">{post.data.title}</h3><p class="section-desc text-sm mt-2">{post.data.excerpt}</p></div><span class="text-xl text-base-content/45">↗</span></div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
