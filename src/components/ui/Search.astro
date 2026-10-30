@@ -3,7 +3,7 @@ const indexUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/search-index.js
 ---
 
 <site-search data-index-url={indexUrl} class="inline-flex shrink-0">
-  <button type="button" data-open class="btn btn-ghost w-10 gap-3 px-0 sm:w-auto sm:border-base-300 sm:px-3" aria-label="Search blog posts and papers" aria-haspopup="dialog" aria-controls="site-search-dialog" title="Search (Ctrl/⌘ K)">
+  <button type="button" data-open class="btn btn-ghost w-10 gap-3 px-0 sm:w-auto sm:border-base-300 sm:px-3" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="site-search-dialog" title="Search (Ctrl/⌘ K)">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.75" /><path stroke-linecap="round" d="m16 16 4.5 4.5" /></svg>
     <span class="hidden sm:inline font-normal text-base-content/70">Search</span>
     <kbd data-shortcut class="kbd kbd-sm hidden sm:inline-flex text-base-content/70" aria-hidden="true">Ctrl K</kbd>
@@ -15,16 +15,11 @@ const indexUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/search-index.js
           <h2 id="search-title" class="text-lg font-semibold">Search</h2>
           <button type="button" data-close class="btn btn-ghost btn-sm" aria-label="Close search">Close <kbd class="kbd kbd-xs hidden sm:inline">Esc</kbd></button>
         </div>
-        <label for="search-query" class="sr-only">Search blog posts and papers</label>
-        <input id="search-query" type="search" class="input w-full" placeholder="Search blog posts and papers…" autocomplete="off" spellcheck="false" autofocus aria-controls="search-results" />
-        <div class="flex gap-2 mt-4" role="group" aria-label="Search in">
-          <button type="button" class="btn btn-sm btn-neutral transition-none" data-category="all" aria-pressed="true">All</button>
-          <button type="button" class="btn btn-sm btn-ghost transition-none" data-category="blog" aria-pressed="false">Blog posts</button>
-          <button type="button" class="btn btn-sm btn-ghost transition-none" data-category="paper" aria-pressed="false">Papers</button>
-        </div>
+        <label for="search-query" class="sr-only">搜索文章</label>
+        <input id="search-query" type="search" class="input w-full" placeholder="搜索文章标题和正文…" autocomplete="off" spellcheck="false" autofocus aria-controls="search-results" />
       </div>
       <div class="shrink-0 px-5 py-4">
-        <p data-status role="status" aria-live="polite" class="text-sm text-base-content/70">Search blog posts, paper titles, and abstracts.</p>
+        <p data-status role="status" aria-live="polite" class="text-sm text-base-content/70">搜索全部 Markdown 文章。</p>
         <button type="button" data-retry class="btn btn-sm btn-outline mt-3" hidden>Try again</button>
       </div>
       <ul id="search-results" class="min-h-0 flex-1 overflow-y-auto px-3 pb-3" aria-label="Search results"></ul>

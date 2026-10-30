@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro'
+import { getCollection } from 'astro:content'
+import BlogPostCard from '@/components/ui/BlogPostCard.astro'
+import Layout from '@/layouts/Layout.astro'
+
+export const getStaticPaths = (async () => {
+  const posts = (await getCollection('blog'))
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  const categories = new Set(posts.map(post => post.data.category))
+  return [...categories].map(category => ({
+    params: { category },
+    props: { category, posts: posts.filter(post => post.data.category === category) },
+  }))
+}) satisfies GetStaticPaths
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+const { category, posts } = Astro.props
+---
+<Layout title={`${category} | ArchEcho`}>
+  <section class="page-head">
+    <a class="link-arrow" href="/blog">← 全部文章</a>
+    <h1 class="section-title mt-6">{category}</h1>
+    <p class="section-desc mt-4">共 {posts.length} 篇文章</p>
+  </section>
+  <div class="max-w-[830px] grid gap-4 pt-9">
+    {posts.map(post => <BlogPostCard post={post} />)}
+  </div>
+</Layout>

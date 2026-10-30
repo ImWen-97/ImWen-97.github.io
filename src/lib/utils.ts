@@ -17,3 +17,7 @@ export function trimExcerpt(excerpt: string): string {
 export function getTagUrl(tag: string): string {
 	return `${template.base}/blog/tags/${encodeURIComponent(tag)}`
 }
+
+export function getCategoryUrl(category: string): string {
+	return `${template.base}/blog/categories/${encodeURIComponent(category)}`
+}

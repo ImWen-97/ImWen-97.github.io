@@ -1,7 +1,8 @@
 ---
 title: "Welcome to ArchEcho"
 date: "2026-10-28"
-tags: ["Research Journey", "ArchEcho"]
+category: "随笔"
+tags: ["ArchEcho", "科研笔记"]
 excerpt: "A home for notes on computer architecture, PIM, LLM inference, and the process of learning through research."
 ---
 

@@ -20,11 +20,11 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { tag, posts } = Astro.props
 ---
 
-<Layout title={`Posts tagged “${tag}”`}>
-    <div>
-        <a href={`${template.base}/blog/1`} class='link link-hover text-accent'>← All blog posts</a>
-        <h1 class='text-3xl font-bold mt-4 mb-8'>Posts tagged “{tag}”</h1>
-        <div class='grid gap-8'>
+<Layout title={`#${tag} | ArchEcho`}>
+    <div class="max-w-[830px] pt-14">
+        <a href={`${template.base}/blog`} class='link-arrow'>← 全部文章</a>
+        <h1 class='section-title mt-6 mb-8'>标签：#{tag}</h1>
+        <div class='grid gap-4'>
             {posts.map(post => <BlogPostCard post={post} />)}
         </div>
     </div>

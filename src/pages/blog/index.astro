@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BlogPostCard from '@/components/ui/BlogPostCard.astro'
+import { getCollection } from 'astro:content'
+import { getCategoryUrl, getTagUrl } from '@/lib/utils'
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+
+const categories = [...new Set(posts.map(post => post.data.category))]
+const tags = [...new Set(posts.flatMap(post => post.data.tags))]
+---
+<Layout title="文章与笔记 | ArchEcho" description="郑景文的文献调研、实验记录与科研笔记。">
+  <section class="page-head">
+    <span class="eyebrow">ArchEcho / Notes</span>
+    <h1 class="section-title mt-5">文章与笔记</h1>
+    <p class="section-desc mt-5">用 Markdown 记录阅读、实验和思考。新增文章后，列表和筛选项会自动更新。</p>
+  </section>
+
+  <div class="max-w-[830px] pt-10">
+    <div class="mb-7">
+      <h2 class="text-xs font-bold tracking-widest text-base-content/50 uppercase mb-3">分类</h2>
+      <div class="flex flex-wrap gap-2">
+        <span class="pill">全部文章 ({posts.length})</span>
+        {categories.map(category => (
+          <a href={getCategoryUrl(category)} class="pill pill-link">{category} ({posts.filter(post => post.data.category === category).length})</a>
+        ))}
+      </div>
+    </div>
+    {tags.length > 0 && (
+      <div class="mb-10">
+        <h2 class="text-xs font-bold tracking-widest text-base-content/50 uppercase mb-3">标签</h2>
+        <div class="flex flex-wrap gap-2">
+          {tags.map(tag => <a class="tag-link" href={getTagUrl(tag)}>#{tag}</a>)}
+        </div>
+      </div>
+    )}
+
+    <h2 class="text-lg font-bold mb-5">全部文章 <span class="text-base-content/45 font-normal text-sm">({posts.length})</span></h2>
+    <div class="grid gap-4">
+      {posts.map(post => <BlogPostCard post={post} />)}
+      {posts.length === 0 && <p class="section-desc">还没有文章。将 Markdown 文件放入 src/content/BlogPosts 后会自动出现在这里。</p>}
+    </div>
+  </div>
+</Layout>

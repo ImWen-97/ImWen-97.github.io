@@ -1,10 +1,7 @@
-// 1. Import utilities from `astro:content`
 import { defineCollection, z } from "astro:content";
-
-// 2. Import loader(s)
 import { glob } from "astro/loaders";
 
-// 3. Define your collection(s)
+// Every Markdown file below BlogPosts (including nested folders) is a post.
 const blog = defineCollection({
     loader: glob({
         pattern: "**/*.md",
@@ -13,9 +10,9 @@ const blog = defineCollection({
     schema: z.object({
         title: z.string(),
         date: z.string(),
-        excerpt: z.string(),
-        tags: z.array(z.string()).optional(),
+        excerpt: z.string().optional(),
+        category: z.enum(["文献调研", "实验记录", "随笔"]).default("随笔"),
+        tags: z.array(z.string()).default([]),
     }),
 });
-// 4. Export a single `collections` object to register your collection(s)
 export const collections = { blog };

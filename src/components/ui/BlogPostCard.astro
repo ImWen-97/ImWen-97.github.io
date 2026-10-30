@@ -1,43 +1,20 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import { getTagUrl, trimExcerpt } from '@/lib/utils'
-import { template } from '@/settings'
+import { getCategoryUrl, getTagUrl, trimExcerpt } from '@/lib/utils'
+import { blogSearchContent } from '@/lib/search-records'
 
-interface Props {
-    post: CollectionEntry<'blog'>
-}
+interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props
+const summary = trimExcerpt(post.data.excerpt ?? blogSearchContent(post.body ?? ''))
 ---
-
-<article class='card bg-base-100 border border-base-300 rounded-2xl transition-all hover:border-[#91afd4]'>
-	<div class='card-body'>
-		<div class='flex flex-wrap justify-between items-start gap-4'>
-			<h2 class='card-title text-xl'>
-				<a href={`${template.base}/blog/${post.id}`} class='hover:text-accent'>
-					{post.data.title}
-				</a>
-			</h2>
-			{post.data.tags?.[0] && (
-				<a href={getTagUrl(post.data.tags[0])} rel='tag' class='badge badge-outline p-4 hover:underline'>
-					{post.data.tags[0]}
-				</a>
-			)}
-		</div>
-		<time datetime={post.data.date} class='text-sm text-base-content/71'>
-			{new Date(post.data.date).toLocaleDateString('en-US', {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			})}
-		</time>
-		<p class='mt-4'>{trimExcerpt(post.data.excerpt)}</p>
-		<div class='card-actions justify-end'>
-			<a
-				href={`${template.base}/blog/${post.id}`}
-				class='btn btn-sm bg-[#27476b] text-white border-0'
-			>
-				Read More
-			</a>
-		</div>
-	</div>
+<article class="border-b border-base-300 py-6 first:pt-0">
+  <div class="flex flex-wrap items-center gap-3 mb-3">
+    <time datetime={post.data.date} class="text-xs text-base-content/50">{post.data.date}</time>
+    <a class="pill pill-link" href={getCategoryUrl(post.data.category)}>{post.data.category}</a>
+    {post.data.tags.map(tag => <a class="tag-link" href={getTagUrl(tag)}>#{tag}</a>)}
+  </div>
+  <h3 class="text-xl font-semibold tracking-tight">
+    <a class="hover:text-[#4478b3] no-underline" href={`/blog/${post.id}`}>{post.data.title}</a>
+  </h3>
+  {summary && <p class="section-desc text-sm mt-2">{summary}</p>}
 </article>

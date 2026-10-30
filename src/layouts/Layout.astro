@@ -10,14 +10,11 @@ type Props = { title?: string; description?: string; image?: string }
 const { title = seo.default_title, description = seo.default_description, image = seo.default_image } = Astro.props
 const links = [
   { name: 'Home', href: '/' },
-  { name: 'Research', href: '/research' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Notes', href: '/blog/1' },
-  { name: 'About', href: '/about' },
+  { name: '文章', href: '/blog' },
 ]
 ---
 <!doctype html>
-<html lang="en" data-theme={template.lightTheme}>
+<html lang="zh-CN" data-theme={template.lightTheme}>
   <head><Head title={title} description={description} image={image} /></head>
   <body class="min-h-screen bg-base-100 text-base-content">
     <div class="site-frame">

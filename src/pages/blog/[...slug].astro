@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { getCategoryUrl, getTagUrl } from '@/lib/utils'
+import { getCollection, render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }))
+}
+
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props
+const { title, date, category, tags } = post.data
+const { Content } = await render(post)
+---
+<Layout title={title} description={post.data.excerpt ?? title}>
+  <article class="max-w-[820px] mx-auto pt-14 md:pt-20">
+    <a class="link-arrow" href="/blog">← 返回文章列表</a>
+    <header class="mt-9 pb-9 border-b border-base-300">
+      <h1 class="text-3xl md:text-4xl font-bold tracking-tight leading-snug">{title}</h1>
+      <div class="flex flex-wrap gap-3 items-center text-sm text-base-content/55 mt-5">
+        <time datetime={date}>{date}</time>
+        <a class="pill pill-link" href={getCategoryUrl(category)}>{category}</a>
+        {tags.map(tag => <a class="tag-link" href={getTagUrl(tag)}>#{tag}</a>)}
+      </div>
+    </header>
+    <div class="prose max-w-none mt-10 prose-headings:text-base-content prose-p:text-base-content/80 prose-a:text-[#4478b3] prose-pre:overflow-x-auto">
+      <Content />
+    </div>
+  </article>
+</Layout>

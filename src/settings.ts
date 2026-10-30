@@ -8,7 +8,7 @@ interface Profile {
 
 export const profile: Profile = {
 	fullName: 'Jingwen Zheng',
-	title: 'Master’s Student · Computer Architecture',
+	title: '计算机技术硕士研究生 · 计算机体系结构',
 	institute: '', // TODO: Add university after confirmation
 	author_name: 'Jingwen Zheng',
 	research_areas: [
@@ -44,7 +44,7 @@ export const template = {
 }
 
 export const seo = {
-	default_title: 'Jingwen Zheng | Research & ArchEcho',
-	default_description: 'Research notes and projects in computer architecture, processing-in-memory, reliable computing, and efficient LLM inference.',
+	default_title: '郑景文 Jingwen Zheng | ArchEcho',
+	default_description: '郑景文的个人主页，记录计算机体系结构方向的文献调研、实验记录与科研思考。',
 	default_image: '/social-preview.svg',
 }

@@ -1,45 +1,62 @@
-# Jingwen Zheng · ArchEcho
+# ArchEcho · 郑景文的个人主页
 
-Personal academic homepage and research notebook for [ImWen-97](https://github.com/ImWen-97), built with Astro. Based on the MIT-licensed [Astro Academia](https://github.com/maiobarbero/astro_academia) starter.
+一个简洁的个人介绍和 Markdown 博客，使用 Astro 构建，部署在 GitHub Pages。
 
-## Run locally
+网站：https://imwen-97.github.io/
 
-Node.js 24 is recommended (or use the Node.js version in the project's .nvmrc).
+## 发布文章（只需修改 Markdown）
+
+在 `src/content/BlogPosts/` 下新建一个 `.md` 文件，也可以放到子文件夹中，例如：
+
+```text
+src/content/BlogPosts/
+├── welcome-to-archecho.md
+├── papers/
+│   └── attacc-reading.md
+└── experiments/
+    └── first-pim-test.md
+```
+
+每篇文章开头填写：
+
+```yaml
+---
+title: "AttAcc 论文阅读笔记"
+date: "2026-10-30"
+category: "文献调研"
+tags: ["PIM", "LLM", "Attention"]
+excerpt: "简短的文章摘要（可省略，省略时从正文提取）。"
+---
+
+# 论文要解决什么问题？
+
+这里直接使用标准 Markdown 写正文。
+```
+
+- `title` 和 `date` 必填，日期使用 `YYYY-MM-DD`。
+- `category` 可填 `文献调研`、`实验记录` 或 `随笔`，不填默认为 `随笔`。
+- `tags` 可任意添加多个标签；`tags` 与 `excerpt` 都可省略。
+- 文件名建议使用英文和连字符；子文件夹可按主题自由组织。
+- 所有 `.md` 文件会自动加入 **/blog 文章列表、分类页、标签页、站内搜索和 RSS**。无需手动维护文件列表。
+- 提交到 `main` 后，GitHub Actions 自动构建网站。
+
+## 修改个人信息
+
+- 主页文案：`src/pages/index.astro`
+- 网站标题、GitHub 地址等：`src/settings.ts`
+- 导航：`src/layouts/Layout.astro`
+- 视觉样式：`src/styles/global.css`
+
+## 本地预览及检查
+
+需要 Node.js 24（或满足当前 Astro 的 Node 版本要求）：
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Open http://localhost:4321.
-
-## Update content
-
-| Content | File |
-| --- | --- |
-| Name, links, research interests, SEO | `src/settings.ts` |
-| Research projects | `src/data/projects.ts` |
-| Public publications and CV data | `src/data/cv.ts` |
-| Research notes | `src/content/BlogPosts/*.md` |
-| Homepage | `src/pages/index.astro` |
-| Global styles | `src/styles/global.css` |
-
-To add a note, create a Markdown file under `src/content/BlogPosts/` with:
-
-```yaml
----
-title: "Paper Reading: Example"
-date: "2026-10-28"
-tags: ["Paper Reading", "PIM"]
-excerpt: "One-sentence description."
----
-```
-
-Content after the frontmatter is ordinary Markdown. Posts automatically appear in the Notes archive and search index.
-
-No unverified affiliations, contact addresses, or accepted publications are included. ReCAF is labeled only as submitted research. Before public release, review the wording in `src/data/projects.ts` for any double-blind submission or disclosure constraints.
-
-## Validate
+打开 http://localhost:4321。
 
 ```bash
 npm test
@@ -48,15 +65,8 @@ npm run check
 npm run build
 ```
 
-## Deploy on GitHub Pages
+## GitHub Pages 发布
 
-1. Use a public repository named `ImWen-97.github.io` and keep the source on the `main` branch.
-2. In GitHub repository **Settings → Pages → Build and deployment**, choose **GitHub Actions**.
-3. The workflow in `.github/workflows/deploy.yml` automatically builds and deploys every push to `main`.
-4. The site URL is https://imwen-97.github.io/.
+仓库为 `ImWen-97/ImWen-97.github.io`。请在 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**，使用 `.github/workflows/deploy.yml` 自动发布。
 
-This is a user site, so `template.base` stays empty. For a project subpath site, update the value and verify internal links.
-
-## License
-
-This customization retains the original upstream license in `LICENSE`; check that license when reusing code.
+改编自 MIT 许可的 [Astro Academia](https://github.com/maiobarbero/astro_academia)，原始许可证保留在 `LICENSE`。
