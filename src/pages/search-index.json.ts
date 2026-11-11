@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '@/lib/blog-posts';
 import { insertMultiple, save } from 'zbsearch';
 import { createSearchDatabase } from '@/lib/search';
 import { blogSearchContent, sitePath } from '@/lib/search-records';
@@ -8,7 +8,7 @@ export const prerender = true;
 
 export const GET: APIRoute = async () => {
   const base = import.meta.env.BASE_URL;
-  const posts = await getCollection('blog');
+  const posts = await getPublishedPosts();
   const records = posts.map(post => ({
       id: `blog:${post.id}`,
       title: post.data.title,

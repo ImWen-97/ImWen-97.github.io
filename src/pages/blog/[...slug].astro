@@ -1,37 +1,86 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import { getCategoryUrl, getTagUrl } from '@/lib/utils'
-import { getCollection, render } from 'astro:content'
+import { render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 import { categoryForPost } from '@/lib/blog-categories'
+import { getOrderedPublishedPosts } from '@/lib/blog-posts'
+import { readingMinutes } from '@/lib/post-utils'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
-  return posts.map(post => ({
+  const posts = await getOrderedPublishedPosts()
+  return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      previousPost: posts[index - 1] ?? null,
+      nextPost: posts[index + 1] ?? null,
+    },
   }))
 }
 
-interface Props { post: CollectionEntry<'blog'> }
-const { post } = Astro.props
+interface Props {
+  post: CollectionEntry<'blog'>
+  previousPost: CollectionEntry<'blog'> | null
+  nextPost: CollectionEntry<'blog'> | null
+}
+const { post, previousPost, nextPost } = Astro.props
 const { title, date, tags } = post.data
 const category = categoryForPost(post)
-const { Content } = await render(post)
+const minutes = readingMinutes(post.body ?? '')
+const { Content, headings } = await render(post)
+const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 3)
 ---
 <Layout title={title} description={post.data.excerpt ?? title}>
-  <article class="max-w-[820px] mx-auto pt-14 md:pt-20">
+  <article class="max-w-[1080px] mx-auto pt-14 md:pt-20">
     <a class="link-arrow" href="/blog">← 返回文章列表</a>
     <header class="mt-9 pb-9 border-b border-base-300">
       <h1 class="text-3xl md:text-4xl font-bold tracking-tight leading-snug">{title}</h1>
       <div class="flex flex-wrap gap-3 items-center text-sm text-base-content/55 mt-5">
         <time datetime={date}>{date}</time>
+        <span>{minutes} 分钟阅读</span>
+        {post.data.draft && <span class="pill">草稿预览</span>}
+        {post.data.pinned && <span class="pill !bg-[#f1e1b8] !text-[#765918] !border-[#dec88f]">置顶</span>}
         <a class="pill pill-link" href={getCategoryUrl(category)}>{category}</a>
         {tags.map(tag => <a class="tag-link" href={getTagUrl(tag)}>#{tag}</a>)}
       </div>
     </header>
-    <div class="prose max-w-none mt-10 prose-headings:text-base-content prose-p:text-base-content/80 prose-a:text-[#4478b3] prose-pre:overflow-x-auto">
-      <Content />
+    <div class="mt-9 grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
+      {toc.length > 0 && (
+        <aside class="order-1 lg:order-2">
+          <nav aria-label="文章目录" class="lg:sticky lg:top-28 rounded-xl border border-base-300 p-5">
+            <h2 class="font-semibold text-sm mb-4">本文目录</h2>
+            <ol class="space-y-2">
+              {toc.map(heading => (
+                <li class:list={['text-sm leading-relaxed', { 'pl-4': heading.depth === 3 }]}>
+                  <a class="text-base-content/65 hover:text-[#4478b3] no-underline" href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+      )}
+      <div class="order-2 lg:order-1 min-w-0">
+        <div class="prose max-w-none prose-headings:text-base-content prose-p:text-base-content/80 prose-a:text-[#4478b3] prose-pre:overflow-x-auto">
+          <Content />
+        </div>
+        {(previousPost || nextPost) && (
+          <nav aria-label="上一篇与下一篇" class="grid sm:grid-cols-2 gap-4 border-t border-base-300 mt-14 pt-8">
+            {previousPost ? (
+              <a class="soft-card no-underline !p-5" href={`/blog/${previousPost.id}`}>
+                <span class="block text-xs text-base-content/50 mb-2">← 上一篇</span>
+                <span class="font-semibold">{previousPost.data.title}</span>
+              </a>
+            ) : <span />}
+            {nextPost && (
+              <a class="soft-card no-underline !p-5 sm:text-right" href={`/blog/${nextPost.id}`}>
+                <span class="block text-xs text-base-content/50 mb-2">下一篇 →</span>
+                <span class="font-semibold">{nextPost.data.title}</span>
+              </a>
+            )}
+          </nav>
+        )}
+      </div>
     </div>
   </article>
 </Layout>

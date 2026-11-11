@@ -1,9 +1,9 @@
 import rss from "@astrojs/rss";
 import { seo } from "../settings";
-import { getCollection } from "astro:content";
+import { getOrderedPublishedPosts } from "../lib/blog-posts";
 
 export async function GET(context) {
-    const blog = await getCollection("blog");
+    const blog = await getOrderedPublishedPosts();
     return rss({
         // `<title>` field in output xml
         title: seo.default_title,

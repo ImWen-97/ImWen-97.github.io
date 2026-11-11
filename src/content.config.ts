@@ -12,6 +12,8 @@ const blog = defineCollection({
         date: z.string(),
         excerpt: z.string().optional(),
         tags: z.array(z.string()).default([]),
+        draft: z.boolean().default(false),
+        pinned: z.boolean().default(false),
     }),
 });
 export const collections = { blog };
