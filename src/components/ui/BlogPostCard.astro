@@ -2,15 +2,17 @@
 import type { CollectionEntry } from 'astro:content'
 import { getCategoryUrl, getTagUrl, trimExcerpt } from '@/lib/utils'
 import { blogSearchContent } from '@/lib/search-records'
+import { categoryForPost } from '@/lib/blog-categories'
 
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props
 const summary = trimExcerpt(post.data.excerpt ?? blogSearchContent(post.body ?? ''))
+const category = categoryForPost(post)
 ---
 <article class="border-b border-base-300 py-6 first:pt-0">
   <div class="flex flex-wrap items-center gap-3 mb-3">
     <time datetime={post.data.date} class="text-xs text-base-content/50">{post.data.date}</time>
-    <a class="pill pill-link" href={getCategoryUrl(post.data.category)}>{post.data.category}</a>
+    <a class="pill pill-link" href={getCategoryUrl(category)}>{category}</a>
     {post.data.tags.map(tag => <a class="tag-link" href={getTagUrl(tag)}>#{tag}</a>)}
   </div>
   <h3 class="text-xl font-semibold tracking-tight">

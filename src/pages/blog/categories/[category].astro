@@ -3,14 +3,15 @@ import type { GetStaticPaths, InferGetStaticPropsType } from 'astro'
 import { getCollection } from 'astro:content'
 import BlogPostCard from '@/components/ui/BlogPostCard.astro'
 import Layout from '@/layouts/Layout.astro'
+import { categoryForPost, listBlogCategories } from '@/lib/blog-categories'
 
 export const getStaticPaths = (async () => {
   const posts = (await getCollection('blog'))
     .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  const categories = new Set(posts.map(post => post.data.category))
-  return [...categories].map(category => ({
+  const categories = listBlogCategories(posts)
+  return categories.map(category => ({
     params: { category },
-    props: { category, posts: posts.filter(post => post.data.category === category) },
+    props: { category, posts: posts.filter(post => categoryForPost(post) === category) },
   }))
 }) satisfies GetStaticPaths
 
@@ -25,5 +26,6 @@ const { category, posts } = Astro.props
   </section>
   <div class="max-w-[830px] grid gap-4 pt-9">
     {posts.map(post => <BlogPostCard post={post} />)}
+    {posts.length === 0 && <p class="section-desc">这个分类还没有文章。在同名文件夹内新建 Markdown 文件，提交后会自动显示在这里。</p>}
   </div>
 </Layout>

@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro'
 import { getCategoryUrl, getTagUrl } from '@/lib/utils'
 import { getCollection, render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
+import { categoryForPost } from '@/lib/blog-categories'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
@@ -14,7 +15,8 @@ export async function getStaticPaths() {
 
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props
-const { title, date, category, tags } = post.data
+const { title, date, tags } = post.data
+const category = categoryForPost(post)
 const { Content } = await render(post)
 ---
 <Layout title={title} description={post.data.excerpt ?? title}>

@@ -1,8 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { categoryForPost, listBlogCategories } from '@/lib/blog-categories'
+import { getCategoryUrl } from '@/lib/utils'
 
-const postCount = (await getCollection('blog')).length
+const posts = await getCollection('blog')
+const postCount = posts.length
+const categories = listBlogCategories(posts)
 ---
 <Layout>
   <section class="max-w-[780px] pt-24 md:pt-36 pb-16">
@@ -13,7 +17,7 @@ const postCount = (await getCollection('blog')).length
     <p class="mt-5 text-lg text-base-content/60">Jingwen Zheng <span class="mx-2 text-base-content/30">/</span> 计算机技术硕士研究生</p>
     <div class="mt-10 space-y-4 text-base md:text-lg leading-[1.95] text-base-content/80">
       <p>目前研究方向为<strong class="font-semibold text-base-content">计算机体系结构</strong>，关注存储系统、AI 加速，以及算法与硬件的协同设计。</p>
-      <p>这里是 <strong class="font-semibold text-base-content">ArchEcho</strong>：一个用 Markdown 维护的个人笔记空间，用来整理文献调研、实验记录和科研中的思考。</p>
+      <p>这里是 <strong class="font-semibold text-base-content">ArchEcho</strong>：一个用 Markdown 维护的个人笔记空间，记录论文阅读、生活感悟、经验与日常。</p>
     </div>
     <div class="mt-10 flex flex-wrap items-center gap-4">
       <a class="btn bg-[#27476b] hover:bg-[#376190] border-0 text-white px-6 rounded-xl" href="/blog">阅读文章 <span aria-hidden="true">↗</span></a>
@@ -26,9 +30,16 @@ const postCount = (await getCollection('blog')).length
       <div>
         <span class="eyebrow">ArchEcho / Writing</span>
         <h2 class="section-title mt-4">文章与笔记</h2>
-        <p class="section-desc text-sm mt-3">文献调研 · 实验记录 · 随笔。现有 {postCount} 篇文章，持续更新中。</p>
+        <p class="section-desc text-sm mt-3">按主题归档，现有 {postCount} 篇文章，持续更新中。</p>
       </div>
       <a class="link-arrow" href="/blog">查看全部文章 →</a>
+    </div>
+    <div class="mt-7 flex flex-wrap gap-3">
+      {categories.map(category => (
+        <a class="pill pill-link !px-4 !py-2.5" href={getCategoryUrl(category)}>
+          {category} <span class="opacity-60">({posts.filter(post => categoryForPost(post) === category).length})</span>
+        </a>
+      ))}
     </div>
   </section>
 </Layout>

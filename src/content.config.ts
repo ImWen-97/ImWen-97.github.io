@@ -11,7 +11,6 @@ const blog = defineCollection({
         title: z.string(),
         date: z.string(),
         excerpt: z.string().optional(),
-        category: z.enum(["文献调研", "实验记录", "随笔"]).default("随笔"),
         tags: z.array(z.string()).default([]),
     }),
 });

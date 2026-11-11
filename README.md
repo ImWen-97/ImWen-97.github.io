@@ -6,15 +6,18 @@
 
 ## 发布文章（只需修改 Markdown）
 
-在 `src/content/BlogPosts/` 下新建一个 `.md` 文件，也可以放到子文件夹中，例如：
+一级文件夹就是文章分类，文件夹名称会自动成为主页按钮和分类页面标题。先使用以下四类：
 
 ```text
 src/content/BlogPosts/
-├── welcome-to-archecho.md
-├── papers/
+├── 文献阅读/
 │   └── attacc-reading.md
-└── experiments/
-    └── first-pim-test.md
+├── 感悟随笔/
+│   └── welcome-to-archecho.md
+├── 经验记录/
+│   └── study-method.md
+└── 放松娱乐/
+    └── weekend.md
 ```
 
 每篇文章开头填写：
@@ -23,7 +26,6 @@ src/content/BlogPosts/
 ---
 title: "AttAcc 论文阅读笔记"
 date: "2026-10-30"
-category: "文献调研"
 tags: ["PIM", "LLM", "Attention"]
 excerpt: "简短的文章摘要（可省略，省略时从正文提取）。"
 ---
@@ -34,11 +36,16 @@ excerpt: "简短的文章摘要（可省略，省略时从正文提取）。"
 ```
 
 - `title` 和 `date` 必填，日期使用 `YYYY-MM-DD`。
-- `category` 可填 `文献调研`、`实验记录` 或 `随笔`，不填默认为 `随笔`。
-- `tags` 可任意添加多个标签；`tags` 与 `excerpt` 都可省略。
-- 文件名建议使用英文和连字符；子文件夹可按主题自由组织。
-- 所有 `.md` 文件会自动加入 **/blog 文章列表、分类页、标签页、站内搜索和 RSS**。无需手动维护文件列表。
+- **无需填写 `category`**：类别只由 `.md` 所在的一级文件夹决定，避免分类信息重复或冲突。
+- `tags` 是跨分类的关键词，如 `PIM`、`读书`；`tags` 与 `excerpt` 都可省略。
+- 文件名建议使用英文和连字符；同一分类可以继续创建多层子文件夹。
+- 新增一级文件夹时，主页入口和对应分类页面自动生成；目前四个文件夹即使为空也会显示。
+- 文章会自动加入 **/blog 文章列表、分类页、标签页、站内搜索和 RSS**。无需手动维护列表或路由。
 - 提交到 `main` 后，GitHub Actions 自动构建网站。
+
+例如：新建 `src/content/BlogPosts/文献阅读/attacc-reading.md`，文章将发布在 `/blog/文献阅读/attacc-reading/`，并自动出现在“文献阅读”分类和对应标签筛选中。
+
+> 注意：新增文件夹时 Git 无法追踪纯空目录。可以先放一篇 `.md`，或放一个空的 `.gitkeep` 文件。
 
 ## 修改个人信息
 
